@@ -1,7 +1,7 @@
 /**
  * Class SerieDeTV
  */
-package uni1a;
+package ups.poo.audiovisual.modelo;
 
 // Subclase SerieDeTV que extiende de ContenidoAudiovisual
 public class SerieDeTV extends ContenidoAudiovisual {

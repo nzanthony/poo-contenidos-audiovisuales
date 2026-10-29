@@ -1,4 +1,4 @@
-package uni1a;
+package ups.poo.audiovisual.modelo;
 
 public abstract class ContenidoAudiovisual {
     private static int contar = 0;

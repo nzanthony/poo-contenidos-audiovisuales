@@ -1,5 +1,5 @@
-package poo;
-import uni1a.*;
+package ups.poo.audiovisual.app;
+import ups.poo.audiovisual.modelo.*;
 
 public class PruebaAudioVisual {
 	public static void main(String[] args) {

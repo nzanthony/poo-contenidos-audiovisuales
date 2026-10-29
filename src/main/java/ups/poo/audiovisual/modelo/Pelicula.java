@@ -1,7 +1,7 @@
 /**
  * Class Pelicula
  */
-package uni1a;
+package ups.poo.audiovisual.modelo;
 
 // Subclase Pelicula que extiende de ContenidoAudiovisual
 public class Pelicula extends ContenidoAudiovisual {
