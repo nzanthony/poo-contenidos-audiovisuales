@@ -34,5 +34,4 @@ public class Actor {
     public void setEdad(int edad) {
         this.edad = edad;
     }
-    
 }

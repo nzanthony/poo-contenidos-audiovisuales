@@ -3,13 +3,22 @@ import ups.poo.audiovisual.modelo.*;
 
 public class PruebaAudioVisual {
 	public static void main(String[] args) {
-        System.out.println("Hello from Eclipse!");
-
+        System.out.println("=== Catalogo de contenidos audiovisuales ===\n");
+        // Crear instancias de Pelicula y agregar actores
+        Pelicula laLaLand = new Pelicula("La La Land", 128, "Musical", "Summit Entertainment");
+        Actor ryanGosling = new Actor("Ryan Gosling", "Canadiense", 30);
+        Actor emmaStone = new Actor("Emma Stone", "Estadounidense", 28);
+        laLaLand.agregarActor(ryanGosling);
+        laLaLand.agregarActor(emmaStone);
+        Pelicula crazyStupidLove = new Pelicula("Crazy, Stupid, Love", 118, "Comedia romántica", "Warner Bros");
+        crazyStupidLove.agregarActor(ryanGosling);
+        crazyStupidLove.agregarActor(emmaStone);
         // Crear instancias de las subclases
-        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[3];
-        contenidos[0] = new Pelicula("Avatar", 125, "Accion", "20th Century Studios");
-        contenidos[1] = new SerieDeTV("Game of Thrones", 60, "Fantasy", 8);
-        contenidos[2] = new Documental("Cosmos", 45, "Science", "Astronomy");
+        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[4];
+        contenidos[0] = laLaLand;
+        contenidos[1] = crazyStupidLove;
+        contenidos[2] = new SerieDeTV("Game of Thrones", 60, "Fantasy", 8);
+        contenidos[3] = new Documental("Cosmos", 45, "Science", "Astronomy");
 
         // Mostrar los detalles de cada contenido audiovisual
         for (ContenidoAudiovisual contenido : contenidos) {
