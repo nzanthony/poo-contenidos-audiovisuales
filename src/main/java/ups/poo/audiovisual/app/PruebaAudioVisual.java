@@ -13,11 +13,16 @@ public class PruebaAudioVisual {
         Pelicula crazyStupidLove = new Pelicula("Crazy, Stupid, Love", 118, "Comedia romántica", "Warner Bros");
         crazyStupidLove.agregarActor(ryanGosling);
         crazyStupidLove.agregarActor(emmaStone);
+        // Crear instacias de serie y agregar temporadas
+        SerieDeTV got = new SerieDeTV("Game of Thrones",60,"Fantasy");
+        got.agregarTemporada(1, 10);
+        got.agregarTemporada(2, 10);
+        got.agregarTemporada(3, 10);
         // Crear instancias de las subclases
         ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[4];
         contenidos[0] = laLaLand;
         contenidos[1] = crazyStupidLove;
-        contenidos[2] = new SerieDeTV("Game of Thrones", 60, "Fantasy", 8);
+        contenidos[2] = got;
         contenidos[3] = new Documental("Cosmos", 45, "Science", "Astronomy");
 
         // Mostrar los detalles de cada contenido audiovisual
