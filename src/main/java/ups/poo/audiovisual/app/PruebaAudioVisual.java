@@ -18,13 +18,19 @@ public class PruebaAudioVisual {
         got.agregarTemporada(1, 10);
         got.agregarTemporada(2, 10);
         got.agregarTemporada(3, 10);
+        //Crear instancias de Documental e investigadores
+        Documental cosmos = new Documental("Cosmos", 45, "Ciencia","Astronomia");
+        Investigador neil = new Investigador("Neil deGrasse Tyson","Estadounidense","Astrofisico",68);
+        cosmos.agregarInvestigador(neil);
+        Documental cosmosPossibleWorlds = new Documental("Cosmos: Possible Worlds", 44, "Ciencia", "Astrobiología");
+        cosmosPossibleWorlds.agregarInvestigador(neil); 
         // Crear instancias de las subclases
-        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[4];
+        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[5];
         contenidos[0] = laLaLand;
         contenidos[1] = crazyStupidLove;
         contenidos[2] = got;
-        contenidos[3] = new Documental("Cosmos", 45, "Science", "Astronomy");
-
+        contenidos[3] = cosmos;
+        contenidos[4] = cosmosPossibleWorlds;
         // Mostrar los detalles de cada contenido audiovisual
         for (ContenidoAudiovisual contenido : contenidos) {
             contenido.mostrarDetalles();
