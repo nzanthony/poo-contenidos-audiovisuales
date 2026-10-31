@@ -39,18 +39,16 @@ public class VideoMusical extends ContenidoAudiovisual{
     }
 
     @Override
-    public void mostrarDetalles() {
-        System.out.println("Detalles del video musical:");
-        System.out.println("ID: " + getId());
-        System.out.println("Título: " + getTitulo());
-        System.out.println("Duración en minutos: " + getDuracionEnMinutos());
-        System.out.println("Género: " + getGenero());
-        System.out.println("Album: " + getAlbum());
-        System.out.println("Año de lanzamiento: " + getAnioLanzamiento());
-        System.out.println("Artistas:");
+    public String getTipo() {
+        return "Video Musical";
+    }
+
+    @Override
+    public String toString() {
+        String texto = super.toString() + "\nAlbum: " + album + "\nAño: " + anioLanzamiento + "\nArtistas: ";
         for (Artista artista : artistas) {
-            System.out.println("  - " + artista.getNombreArtistico() + " (" + artista.getNombre() + ")");
+            texto += "\n  - " + artista.getNombreArtistico() + " (" + artista.getNombre() + ")";
         }
-        System.out.println();
+        return texto;
     }
 }

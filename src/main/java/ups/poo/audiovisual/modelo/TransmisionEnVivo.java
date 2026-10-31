@@ -39,18 +39,17 @@ public class TransmisionEnVivo extends ContenidoAudiovisual{
     }
 
     @Override
-    public void mostrarDetalles() {
-        System.out.println("Detalles de la transmision en vivo:");
-        System.out.println("ID: " + getId());
-        System.out.println("Título: " + getTitulo());
-        System.out.println("Género: " + getGenero());
-        System.out.println("Plataforma: " + getPlataforma());
-        System.out.println("Duracion en minutos: " + getDuracionEnMinutos());
-        System.out.println("Agenda:");
+    public String getTipo() {
+        return "Transmision en vivo";
+    }
+
+    @Override
+    public String toString() {
+        String texto = super.toString() + "\nPlataforma: " + plataforma + "\nAgenda:";
         for (Segmento segmento : segmentos) {
-            System.out.println("  - " + segmento.getTitulo() + " (" + segmento.getDuracionEnMinutos() + " min)");
+            texto += "\n  - " + segmento.getTitulo() + " (" + segmento.getDuracionEnMinutos() + " min)";
         }
-        System.out.println("Duracion total de la agenda: " + calcularDuracion() + " min");
-        System.out.println();
+        texto += "\nDuracion total de la agenda: " + calcularDuracion() + " min";
+        return texto;
     }
 }

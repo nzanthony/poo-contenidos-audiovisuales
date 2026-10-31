@@ -49,7 +49,8 @@ public class PruebaAudioVisual {
         contenidos[7] = velada;
         // Mostrar los detalles de cada contenido audiovisual
         for (ContenidoAudiovisual contenido : contenidos) {
-            contenido.mostrarDetalles();
+            System.out.println(contenido);
+            System.out.println();
         }
     }
 }

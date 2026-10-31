@@ -26,18 +26,18 @@ public class SerieDeTV extends ContenidoAudiovisual {
     public List<Temporada> getTemporadas() {
         return List.copyOf(temporadas);
     }
-    
+
     @Override
-    public void mostrarDetalles() {
-        System.out.println("Detalles de la serie de TV:");
-        System.out.println("ID: " + getId());
-        System.out.println("Título: " + getTitulo());
-        System.out.println("Duración en minutos: " + getDuracionEnMinutos());
-        System.out.println("Género: " + getGenero());
-        System.out.println("Temporadas: " + getNumeroTemporadas());
+    public String getTipo() {
+        return "Serie de TV";
+    }
+
+    @Override
+    public String toString() {
+        String texto = super.toString() + "\nTemporadas: " + getNumeroTemporadas();
         for (Temporada temporada : temporadas) {
-            System.out.println("  Temporada " + temporada.getNumero() + ": " + temporada.getCantidadEpisodios() + " episodios");
+            texto += "\n  - Temporada " + temporada.getNumero() + ": " + temporada.getCantidadEpisodios() + " episodios";
         }
-        System.out.println();
+        return texto;
     }
 }

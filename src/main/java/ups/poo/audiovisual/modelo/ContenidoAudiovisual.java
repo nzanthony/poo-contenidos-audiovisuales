@@ -46,5 +46,10 @@ public abstract class ContenidoAudiovisual {
         return id;
     }
     
-    public abstract void mostrarDetalles();
+    public abstract String getTipo();
+
+    @Override 
+    public String toString(){
+        return "=== " + getTipo() + " ===\n" + "ID: " + id + "\n" + "Titulo: " + titulo + "\n" + "Duracion en minutos: " + duracionEnMinutos + "\n" + "Genero: " + genero;
+    }
 }
