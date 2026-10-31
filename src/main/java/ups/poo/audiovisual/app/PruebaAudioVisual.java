@@ -23,14 +23,24 @@ public class PruebaAudioVisual {
         Investigador neil = new Investigador("Neil deGrasse Tyson","Estadounidense","Astrofisico",68);
         cosmos.agregarInvestigador(neil);
         Documental cosmosPossibleWorlds = new Documental("Cosmos: Possible Worlds", 44, "Ciencia", "Astrobiología");
-        cosmosPossibleWorlds.agregarInvestigador(neil); 
+        cosmosPossibleWorlds.agregarInvestigador(neil);
+        // Crear instancias de VideoMusical y Artistas
+        Artista luisFonsi = new Artista("Luis Alfonso Rodríguez", "Puertorriqueña", 48, "Luis Fonsi");
+        Artista daddyYankee = new Artista("Ramón Ayala", "Puertorriqueña", 49, "Daddy Yankee");
+        VideoMusical despacito = new VideoMusical("Despacito", 5, "Reguetón", "Vida", 2017);
+        despacito.agregarArtista(luisFonsi);
+        despacito.agregarArtista(daddyYankee);
+        VideoMusical gasolina = new VideoMusical("Gasolina", 3, "Reguetón", "Barrio Fino", 2004);
+        gasolina.agregarArtista(daddyYankee);
         // Crear instancias de las subclases
-        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[5];
+        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[7];
         contenidos[0] = laLaLand;
         contenidos[1] = crazyStupidLove;
         contenidos[2] = got;
         contenidos[3] = cosmos;
         contenidos[4] = cosmosPossibleWorlds;
+        contenidos[5] = despacito;
+        contenidos[6] = gasolina;
         // Mostrar los detalles de cada contenido audiovisual
         for (ContenidoAudiovisual contenido : contenidos) {
             contenido.mostrarDetalles();
