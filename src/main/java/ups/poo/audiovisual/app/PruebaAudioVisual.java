@@ -32,8 +32,13 @@ public class PruebaAudioVisual {
         despacito.agregarArtista(daddyYankee);
         VideoMusical gasolina = new VideoMusical("Gasolina", 3, "Reguetón", "Barrio Fino", 2004);
         gasolina.agregarArtista(daddyYankee);
+        // Crear instancias de TransmisionEnVivo y agregar segmentos
+        TransmisionEnVivo velada = new TransmisionEnVivo("La Velada del Año", 255, "Entretenimiento", "Twitch");
+        velada.agregarSegmento("Previa", 30);
+        velada.agregarSegmento("Combates", 180);
+        velada.agregarSegmento("Concierto final", 45);
         // Crear instancias de las subclases
-        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[7];
+        ContenidoAudiovisual[] contenidos = new ContenidoAudiovisual[8];
         contenidos[0] = laLaLand;
         contenidos[1] = crazyStupidLove;
         contenidos[2] = got;
@@ -41,6 +46,7 @@ public class PruebaAudioVisual {
         contenidos[4] = cosmosPossibleWorlds;
         contenidos[5] = despacito;
         contenidos[6] = gasolina;
+        contenidos[7] = velada;
         // Mostrar los detalles de cada contenido audiovisual
         for (ContenidoAudiovisual contenido : contenidos) {
             contenido.mostrarDetalles();
