@@ -1,32 +1,11 @@
 package ups.poo.audiovisual.modelo;
 
-public class Investigador {
-    private String nombre;
-    private String nacionalidad;
+public class Investigador extends Persona {
     private String especialidad;
-    private int edad;
 
     public Investigador(String nombre, String nacionalidad, String especialidad, int edad){
-        this.nombre = nombre;
-        this.nacionalidad = nacionalidad;
+        super(nombre, nacionalidad, edad);
         this.especialidad = especialidad;
-        this.edad = edad;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
     }
 
     public String getEspecialidad() {
@@ -35,13 +14,5 @@ public class Investigador {
 
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
-    }
-
-    public int getEdad() {
-        return edad;
-    }
-    
-    public void setEdad(int edad) {
-        this.edad = edad;
     }
 }

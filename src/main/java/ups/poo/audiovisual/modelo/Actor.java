@@ -1,37 +1,8 @@
 package ups.poo.audiovisual.modelo;
 
-public class Actor {
-    private String nombre;
-    private String nacionalidad;
-    private int edad;
+public class Actor extends Persona{
 
     public Actor(String nombre,String nacionalidad, int edad){
-        this.nombre = nombre;
-        this.nacionalidad = nacionalidad;
-        this.edad = edad;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
-    }
-
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
+        super(nombre, nacionalidad, edad);
     }
 }
