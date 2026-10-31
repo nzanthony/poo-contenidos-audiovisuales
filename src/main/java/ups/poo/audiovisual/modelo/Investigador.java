@@ -44,6 +44,4 @@ public class Investigador {
     public void setEdad(int edad) {
         this.edad = edad;
     }
-    
-
 }
