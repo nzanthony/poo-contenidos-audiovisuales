@@ -80,9 +80,15 @@ public class VistaConsola {
         }
     }
 
-    public String leerTexto(String mensaje){
-        System.out.print(mensaje);
-        return scanner.nextLine();
+    public String leerTexto(String mensaje) {
+        while (true) {
+            System.out.print(mensaje);
+            String linea = scanner.nextLine().trim();
+            if (!linea.isEmpty()) {
+                return linea;
+            }
+            System.out.println("Error: el texto no puede estar vacio.");
+        }
     }
 
     public void mostrarMensaje(String mensaje){

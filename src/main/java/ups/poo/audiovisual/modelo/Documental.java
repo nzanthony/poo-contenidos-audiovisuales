@@ -15,8 +15,13 @@ public class Documental extends ContenidoAudiovisual {
         investigadores = new ArrayList<Investigador>();
         this.tema = tema;
     }
-    public void agregarInvestigador(Investigador investigador){
+    
+    public boolean agregarInvestigador(Investigador investigador){
+        if (investigador == null || investigadores.contains(investigador)) {
+            return false;
+        }
         investigadores.add(investigador);
+        return true;
     }
 
     public List <Investigador> getInvestigadores(){

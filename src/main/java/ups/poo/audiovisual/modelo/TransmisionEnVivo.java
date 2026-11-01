@@ -13,9 +13,12 @@ public class TransmisionEnVivo extends ContenidoAudiovisual{
         segmentos = new ArrayList<Segmento>();
     }
 
-    public void agregarSegmento(String titulo, int duracionEnMinutos){
-        Segmento segmento = new Segmento(titulo, duracionEnMinutos);
-        segmentos.add(segmento);
+    public boolean agregarSegmento(String titulo, int duracionEnMinutos){
+        if (duracionEnMinutos > getDuracionEnMinutos() - calcularDuracion()) {
+            return false;
+        }
+        segmentos.add(new Segmento(titulo, duracionEnMinutos));
+        return true;
     }
     
     public List<Segmento> getSegmentos() {

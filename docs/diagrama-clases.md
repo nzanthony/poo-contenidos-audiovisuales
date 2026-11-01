@@ -18,13 +18,13 @@ classDiagram
     class Pelicula {
         -estudio : String
         +Pelicula(titulo: String, duracionEnMinutos: int, genero: String, estudio: String)
-        +agregarActor(actor: Actor) void
+        +agregarActor(actor: Actor) boolean
         +getTipo() String
         +toString() String
     }
     class SerieDeTV {
         +SerieDeTV(titulo: String, duracionEnMinutos: int, genero: String)
-        +agregarTemporada(numero: int, cantidadEpisodios: int) void
+        +agregarTemporada(numero: int, cantidadEpisodios: int) boolean
         +getNumeroTemporadas() int
         +getTipo() String
         +toString() String
@@ -32,7 +32,7 @@ classDiagram
     class Documental {
         -tema : String
         +Documental(titulo: String, duracionEnMinutos: int, genero: String, tema: String)
-        +agregarInvestigador(investigador: Investigador) void
+        +agregarInvestigador(investigador: Investigador) boolean
         +getTipo() String
         +toString() String
     }
@@ -40,14 +40,14 @@ classDiagram
         -album : String
         -anioLanzamiento : int
         +VideoMusical(titulo: String, duracionEnMinutos: int, genero: String, album: String, anioLanzamiento: int)
-        +agregarArtista(artista: Artista) void
+        +agregarArtista(artista: Artista) boolean
         +getTipo() String
         +toString() String
     }
     class TransmisionEnVivo {
         -plataforma : String
         +TransmisionEnVivo(titulo: String, duracionEnMinutos: int, genero: String, plataforma: String)
-        +agregarSegmento(titulo: String, duracionEnMinutos: int) void
+        +agregarSegmento(titulo: String, duracionEnMinutos: int) boolean
         +calcularDuracion() int
         +getTipo() String
         +toString() String

@@ -126,31 +126,46 @@ public class ControladorContenidos {
         if (contenido instanceof Pelicula pelicula) {
             Actor actor = elegirPersona(actores, "Actores");
             if (actor != null) {
-                pelicula.agregarActor(actor);
-                vista.mostrarMensaje(actor.getNombre() + " agregado a \"" + pelicula.getTitulo() + "\"");
+                if (pelicula.agregarActor(actor)) {
+                    vista.mostrarMensaje(actor.getNombre() + " agregado a \"" + pelicula.getTitulo() + "\"");
+                } else {
+                    vista.mostrarError(actor.getNombre() + " ya esta en \"" + pelicula.getTitulo() + "\"");
+                }
             }
         } else if (contenido instanceof Documental documental) {
             Investigador investigador = elegirPersona(investigadores, "Investigadores");
             if (investigador != null) {
-                documental.agregarInvestigador(investigador);
-                vista.mostrarMensaje(investigador.getNombre() + " agregado a \"" + documental.getTitulo() + "\"");
+                if (documental.agregarInvestigador(investigador)) {
+                    vista.mostrarMensaje(investigador.getNombre() + " agregado a \"" + documental.getTitulo() + "\"");
+                } else {
+                    vista.mostrarError(investigador.getNombre() + " ya esta en \"" + documental.getTitulo() + "\"");
+                }
             }
         } else if (contenido instanceof VideoMusical video) {
             Artista artista = elegirPersona(artistas, "Artistas");
             if (artista != null) {
-                video.agregarArtista(artista);
-                vista.mostrarMensaje(artista.getNombreArtistico() + " agregado a \"" + video.getTitulo() + "\"");
+                if (video.agregarArtista(artista)) {
+                    vista.mostrarMensaje(artista.getNombreArtistico() + " agregado a \"" + video.getTitulo() + "\"");
+                } else {
+                    vista.mostrarError(artista.getNombreArtistico() + " ya esta en \"" + video.getTitulo() + "\"");
+                }
             }
         } else if (contenido instanceof SerieDeTV serie) {
             int numero = vista.leerEntero("Numero de temporada: ", 1, Integer.MAX_VALUE);
             int episodios = vista.leerEntero("Cantidad de episodios: ", 1, Integer.MAX_VALUE);
-            serie.agregarTemporada(numero, episodios);
-            vista.mostrarMensaje("Temporada " + numero + " agregada a \"" + serie.getTitulo() + "\"");
+            if (serie.agregarTemporada(numero, episodios)) {
+                vista.mostrarMensaje("Temporada " + numero + " agregada a \"" + serie.getTitulo() + "\"");
+            } else {
+                vista.mostrarError("La temporada " + numero + " ya existe en \"" + serie.getTitulo() + "\"");
+            }
         } else if (contenido instanceof TransmisionEnVivo transmision) {
             String titulo = vista.leerTexto("Titulo del segmento: ");
             int duracion = vista.leerEntero("Duracion del segmento (min): ", 1, Integer.MAX_VALUE);
-            transmision.agregarSegmento(titulo, duracion);
-            vista.mostrarMensaje("Segmento \"" + titulo + "\" agregado a \"" + transmision.getTitulo() + "\"");
+            if (transmision.agregarSegmento(titulo, duracion)) {
+                vista.mostrarMensaje("Segmento \"" + titulo + "\" agregado a \"" + transmision.getTitulo() + "\"");
+            } else {
+                vista.mostrarError("El segmento excede la duracion de la transmision");
+            }
         }
     }
     //Metodo auxiliar para elegir persona
@@ -175,7 +190,14 @@ public class ControladorContenidos {
         int campo = vista.leerEntero("Campo: ", 0, 3);
         switch (campo) {
             case 1 -> contenido.setTitulo(vista.leerTexto("Nuevo titulo: "));
-            case 2 -> contenido.setDuracionEnMinutos(vista.leerEntero("Nueva duracion en minutos: ", 1, Integer.MAX_VALUE));
+            case 2 -> {
+                int nuevaDuracion = vista.leerEntero("Nueva duracion en minutos: ", 1, Integer.MAX_VALUE);
+                if (contenido instanceof TransmisionEnVivo transmision && nuevaDuracion < transmision.calcularDuracion()) {
+                    vista.mostrarError("La duracion no puede ser menor que la agenda (" + transmision.calcularDuracion() + " min)");
+                    return;
+                }
+                contenido.setDuracionEnMinutos(nuevaDuracion);
+            }
             case 3 -> contenido.setGenero(vista.leerTexto("Nuevo genero: "));
             case 0 -> { return; }
         }

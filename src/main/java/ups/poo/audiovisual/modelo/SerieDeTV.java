@@ -14,9 +14,14 @@ public class SerieDeTV extends ContenidoAudiovisual {
         this.temporadas = new ArrayList<>();
     }
 
-    public void agregarTemporada(int numero, int cantidadEpisodios) {
-        Temporada temporada = new Temporada(numero, cantidadEpisodios);
-        this.temporadas.add(temporada);
+    public boolean agregarTemporada(int numero, int cantidadEpisodios) {
+        for (Temporada temporada : temporadas) {
+            if (temporada.getNumero() == numero) {
+                return false;
+            }
+        }
+        temporadas.add(new Temporada(numero, cantidadEpisodios));
+        return true;
     }
 
     public int getNumeroTemporadas() {

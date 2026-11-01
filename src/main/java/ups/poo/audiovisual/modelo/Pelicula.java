@@ -24,8 +24,12 @@ public class Pelicula extends ContenidoAudiovisual {
         this.estudio = estudio;
     }
 
-    public void agregarActor(Actor actor) {
+    public boolean agregarActor(Actor actor) {
+        if (actor == null || actores.contains(actor)) {
+            return false;
+        }
         actores.add(actor);
+        return true;
     }
 
     public List<Actor> getActores() {

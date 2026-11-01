@@ -14,8 +14,12 @@ public class VideoMusical extends ContenidoAudiovisual{
         this.artistas = new ArrayList<>();
     }
 
-    public void agregarArtista(Artista artista){
+    public boolean agregarArtista(Artista artista){
+        if (artista == null || artistas.contains(artista)) {
+            return false;
+        }
         artistas.add(artista);
+        return true;
     }
 
     public List<Artista> getArtistas(){
