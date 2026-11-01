@@ -9,6 +9,7 @@ import ups.poo.audiovisual.modelo.ContenidoAudiovisual;
 import ups.poo.audiovisual.modelo.Documental;
 import ups.poo.audiovisual.modelo.Investigador;
 import ups.poo.audiovisual.modelo.Pelicula;
+import ups.poo.audiovisual.modelo.Persona;
 import ups.poo.audiovisual.modelo.SerieDeTV;
 import ups.poo.audiovisual.modelo.TransmisionEnVivo;
 import ups.poo.audiovisual.modelo.VideoMusical;
@@ -87,11 +88,30 @@ public class ControladorContenidos {
     private void registrarPersona() {
         vista.menuRegistrarPersona();
         int tipo = vista.leerEntero("Tipo: ", 0, 3);
+        if (tipo == 0) {
+            return;
+        }
+
+        // Datos comunes a todas las personas
+        String nombre = vista.leerTexto("Nombre: ");
+        String nacionalidad = vista.leerTexto("Nacionalidad: ");
+        int edad = vista.leerEntero("Edad: ", 0, 120);
+
         switch (tipo) {
-            case 1 -> vista.mostrarMensaje("Registrar actor: en construccion");
-            case 2 -> vista.mostrarMensaje("Registrar investigador: en construccion");
-            case 3 -> vista.mostrarMensaje("Registrar artista: en construccion");
-            case 0 -> { }
+            case 1 -> {
+                registrarActor(new Actor(nombre, nacionalidad, edad));
+                vista.mostrarMensaje("Actor \"" + nombre + "\" registrado");
+            }
+            case 2 -> {
+                String especialidad = vista.leerTexto("Especialidad: ");
+                registrarInvestigador(new Investigador(nombre, nacionalidad, especialidad, edad));
+                vista.mostrarMensaje("Investigador \"" + nombre + "\" registrado");
+            }
+            case 3 -> {
+                String nombreArtistico = vista.leerTexto("Nombre artistico: ");
+                registrarArtista(new Artista(nombre, nacionalidad, edad, nombreArtistico));
+                vista.mostrarMensaje("Artista \"" + nombreArtistico + "\" registrado");
+            }
         }
     }
 
@@ -101,7 +121,48 @@ public class ControladorContenidos {
         if (contenido == null) {
             return;
         }
-        vista.mostrarMensaje("Agregar a " + contenido.getTipo() + ": en construccion");
+        vista.mostrarMensaje("Agregando a " + contenido.getTipo() + " \"" + contenido.getTitulo() + "\"");
+
+        if (contenido instanceof Pelicula pelicula) {
+            Actor actor = elegirPersona(actores, "Actores");
+            if (actor != null) {
+                pelicula.agregarActor(actor);
+                vista.mostrarMensaje(actor.getNombre() + " agregado a \"" + pelicula.getTitulo() + "\"");
+            }
+        } else if (contenido instanceof Documental documental) {
+            Investigador investigador = elegirPersona(investigadores, "Investigadores");
+            if (investigador != null) {
+                documental.agregarInvestigador(investigador);
+                vista.mostrarMensaje(investigador.getNombre() + " agregado a \"" + documental.getTitulo() + "\"");
+            }
+        } else if (contenido instanceof VideoMusical video) {
+            Artista artista = elegirPersona(artistas, "Artistas");
+            if (artista != null) {
+                video.agregarArtista(artista);
+                vista.mostrarMensaje(artista.getNombreArtistico() + " agregado a \"" + video.getTitulo() + "\"");
+            }
+        } else if (contenido instanceof SerieDeTV serie) {
+            int numero = vista.leerEntero("Numero de temporada: ", 1, Integer.MAX_VALUE);
+            int episodios = vista.leerEntero("Cantidad de episodios: ", 1, Integer.MAX_VALUE);
+            serie.agregarTemporada(numero, episodios);
+            vista.mostrarMensaje("Temporada " + numero + " agregada a \"" + serie.getTitulo() + "\"");
+        } else if (contenido instanceof TransmisionEnVivo transmision) {
+            String titulo = vista.leerTexto("Titulo del segmento: ");
+            int duracion = vista.leerEntero("Duracion del segmento (min): ", 1, Integer.MAX_VALUE);
+            transmision.agregarSegmento(titulo, duracion);
+            vista.mostrarMensaje("Segmento \"" + titulo + "\" agregado a \"" + transmision.getTitulo() + "\"");
+        }
+    }
+    //Metodo auxiliar para elegir persona
+    private <T extends Persona> T elegirPersona(List<T> personas, String tipo) {
+        if (personas.isEmpty()) {
+            vista.mostrarError("No hay " + tipo + " registrados. Registre uno con la opcion 3.");
+            return null;
+        }
+        vista.mostrarMensaje(tipo + " registrados:");
+        vista.mostrarPersonas(personas);
+        int numero = vista.leerEntero("Elija un numero: ", 1, personas.size());
+        return personas.get(numero - 1);
     }
     
     // Submenu opcion 5
