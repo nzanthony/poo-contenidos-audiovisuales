@@ -174,11 +174,13 @@ public class ControladorContenidos {
         vista.menuModificarContenido();
         int campo = vista.leerEntero("Campo: ", 0, 3);
         switch (campo) {
-            case 1 -> vista.mostrarMensaje("Modificar titulo: en construccion");
-            case 2 -> vista.mostrarMensaje("Modificar duracion: en construccion");
-            case 3 -> vista.mostrarMensaje("Modificar genero: en construccion");
-            case 0 -> { }
+            case 1 -> contenido.setTitulo(vista.leerTexto("Nuevo titulo: "));
+            case 2 -> contenido.setDuracionEnMinutos(vista.leerEntero("Nueva duracion en minutos: ", 1, Integer.MAX_VALUE));
+            case 3 -> contenido.setGenero(vista.leerTexto("Nuevo genero: "));
+            case 0 -> { return; }
         }
+        vista.mostrarMensaje("Contenido actualizado:");
+        vista.mostrarMensaje(contenido.toString());
     }
 
     // Opcion 6
@@ -187,7 +189,14 @@ public class ControladorContenidos {
         if (contenido == null) {
             return;
         }
-        vista.mostrarMensaje("Eliminar contenido: en construccion");
+        vista.mostrarMensaje("Se eliminara " + contenido.getTipo() + " \"" + contenido.getTitulo() + "\"");
+        int confirmar = vista.leerEntero("Confirmar (1 = Si, 0 = No): ", 0, 1);
+        if (confirmar == 1) {
+            contenidos.remove(contenido);
+            vista.mostrarMensaje("Contenido eliminado");
+        } else {
+            vista.mostrarMensaje("Eliminacion cancelada");
+        }
     }
 
     // Metodos auxiliares
