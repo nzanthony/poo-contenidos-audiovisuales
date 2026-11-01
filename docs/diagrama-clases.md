@@ -1,3 +1,7 @@
+# Diagrama de clases
+
+## 1. Modelo
+
 ```mermaid
 classDiagram
     class ContenidoAudiovisual {
@@ -8,39 +12,45 @@ classDiagram
         -genero : String
         -id : int
         +ContenidoAudiovisual(titulo: String, duracionEnMinutos: int, genero: String)
-        +mostrarDetalles()* void
+        +getTipo()* String
+        +toString() String
     }
     class Pelicula {
         -estudio : String
         +Pelicula(titulo: String, duracionEnMinutos: int, genero: String, estudio: String)
         +agregarActor(actor: Actor) void
-        +mostrarDetalles() void
+        +getTipo() String
+        +toString() String
     }
     class SerieDeTV {
         +SerieDeTV(titulo: String, duracionEnMinutos: int, genero: String)
         +agregarTemporada(numero: int, cantidadEpisodios: int) void
         +getNumeroTemporadas() int
-        +mostrarDetalles() void
+        +getTipo() String
+        +toString() String
     }
     class Documental {
         -tema : String
         +Documental(titulo: String, duracionEnMinutos: int, genero: String, tema: String)
         +agregarInvestigador(investigador: Investigador) void
-        +mostrarDetalles() void
+        +getTipo() String
+        +toString() String
     }
     class VideoMusical {
         -album : String
         -anioLanzamiento : int
         +VideoMusical(titulo: String, duracionEnMinutos: int, genero: String, album: String, anioLanzamiento: int)
         +agregarArtista(artista: Artista) void
-        +mostrarDetalles() void
+        +getTipo() String
+        +toString() String
     }
     class TransmisionEnVivo {
         -plataforma : String
         +TransmisionEnVivo(titulo: String, duracionEnMinutos: int, genero: String, plataforma: String)
         +agregarSegmento(titulo: String, duracionEnMinutos: int) void
         +calcularDuracion() int
-        +mostrarDetalles() void
+        +getTipo() String
+        +toString() String
     }
     class Persona {
         <<abstract>>
@@ -70,9 +80,6 @@ classDiagram
         -duracionEnMinutos : int
         ~Segmento(titulo: String, duracionEnMinutos: int)
     }
-    class PruebaAudioVisual {
-        +main(args: String[]) void$
-    }
 
     ContenidoAudiovisual <|-- Pelicula
     ContenidoAudiovisual <|-- SerieDeTV
@@ -87,13 +94,68 @@ classDiagram
     Documental "0..*" o-- "0..*" Investigador : investigadores
     VideoMusical "0..*" --> "0..*" Artista : artistas
     TransmisionEnVivo "1" *-- "0..*" Segmento : segmentos
-    PruebaAudioVisual ..> ContenidoAudiovisual : usa
-    PruebaAudioVisual ..> Pelicula : crea
-    PruebaAudioVisual ..> SerieDeTV : crea
-    PruebaAudioVisual ..> Documental : crea
-    PruebaAudioVisual ..> VideoMusical : crea
-    PruebaAudioVisual ..> TransmisionEnVivo : crea
-    PruebaAudioVisual ..> Actor : crea
-    PruebaAudioVisual ..> Investigador : crea
-    PruebaAudioVisual ..> Artista : crea
+```
+
+## 2. Arquitectura MVC
+
+```mermaid
+classDiagram
+    class Main {
+        +main(args: String[]) void$
+        -cargarDatosIniciales(controlador: ControladorContenidos) void$
+    }
+    class VistaConsola {
+        -scanner : Scanner
+        +menuPrincipal() void
+        +menuCrearContenidos() void
+        +menuRegistrarPersona() void
+        +menuModificarContenido() void
+        +mostrarContenidos(contenidos: List~ContenidoAudiovisual~) void
+        +mostrarPersonas(personas: List~? extends Persona~) void
+        +leerEntero(mensaje: String) int
+        +leerEntero(mensaje: String, minimo: int, maximo: int) int
+        +leerTexto(mensaje: String) String
+        +mostrarMensaje(mensaje: String) void
+        +mostrarError(mensaje: String) void
+    }
+    class ControladorContenidos {
+        +ControladorContenidos(vista: VistaConsola)
+        +iniciar() void
+        +agregarContenido(contenido: ContenidoAudiovisual) void
+        +registrarActor(actor: Actor) void
+        +registrarInvestigador(investigador: Investigador) void
+        +registrarArtista(artista: Artista) void
+        -crearContenido() void
+        -registrarPersona() void
+        -agregarAContenido() void
+        -modificarContenido() void
+        -eliminarContenido() void
+        -buscarContenidoPorId(id: int) ContenidoAudiovisual
+        -pedirContenido() ContenidoAudiovisual
+        -elegirPersona(personas: List~T~, tipo: String) T
+    }
+    class ContenidoAudiovisual {
+        <<abstract>>
+    }
+    class Persona {
+        <<abstract>>
+    }
+    class Actor
+    class Investigador
+    class Artista
+
+    Persona <|-- Actor
+    Persona <|-- Investigador
+    Persona <|-- Artista
+    Main ..> VistaConsola : crea
+    Main ..> ControladorContenidos : crea
+    Main ..> ContenidoAudiovisual : carga datos
+    Main ..> Persona : carga datos
+    ControladorContenidos "1" --> "1" VistaConsola : vista
+    ControladorContenidos "1" o-- "0..*" ContenidoAudiovisual : contenidos
+    ControladorContenidos "1" o-- "0..*" Actor : actores
+    ControladorContenidos "1" o-- "0..*" Investigador : investigadores
+    ControladorContenidos "1" o-- "0..*" Artista : artistas
+    VistaConsola ..> ContenidoAudiovisual : muestra
+    VistaConsola ..> Persona : muestra
 ```
