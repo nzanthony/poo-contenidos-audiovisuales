@@ -15,6 +15,7 @@ import ups.poo.audiovisual.modelo.TransmisionEnVivo;
 import ups.poo.audiovisual.modelo.VideoMusical;
 import ups.poo.audiovisual.vista.VistaConsola;
 
+// Conecta la vista de consola con el modelo y guarda los datos en memoria
 public class ControladorContenidos {
     private VistaConsola vista;
     private List<ContenidoAudiovisual> contenidos;
@@ -30,6 +31,7 @@ public class ControladorContenidos {
         this.artistas = new ArrayList<>();
     }
 
+    // Repite el menu principal hasta que el usuario elija salir con 0
     public void iniciar() {
         int opcion;
         do {
@@ -47,7 +49,7 @@ public class ControladorContenidos {
         } while (opcion != 0);
     }
 
-    // Submenu opcion 2
+    // Opcion 2 crea un contenido del tipo elegido en el submenu
     private void crearContenido() {
         vista.menuCrearContenidos();
         int tipo = vista.leerEntero("Tipo: ", 0, 5);
@@ -59,6 +61,7 @@ public class ControladorContenidos {
         int duracion = vista.leerEntero("Duracion en minutos: ", 1, Integer.MAX_VALUE);
         String genero = vista.leerTexto("Genero: ");
 
+        // Pide los datos propios de cada tipo antes de crear el objeto
         ContenidoAudiovisual nuevo = null;
         switch (tipo) {
             case 1 -> {
@@ -84,7 +87,7 @@ public class ControladorContenidos {
         vista.mostrarMensaje(nuevo.getTipo() + " \"" + nuevo.getTitulo() + "\" creado con ID " + nuevo.getId());
     }
 
-    // Submenu opcion 3
+    // Opcion 3 registra una persona para luego agregarla a un contenido
     private void registrarPersona() {
         vista.menuRegistrarPersona();
         int tipo = vista.leerEntero("Tipo: ", 0, 3);
@@ -115,7 +118,7 @@ public class ControladorContenidos {
         }
     }
 
-    // Opcion 4
+    // Opcion 4 agrega personas o temporadas o segmentos segun el tipo de contenido
     private void agregarAContenido() {
         ContenidoAudiovisual contenido = pedirContenido();
         if (contenido == null) {
@@ -123,6 +126,7 @@ public class ControladorContenidos {
         }
         vista.mostrarMensaje("Agregando a " + contenido.getTipo() + " \"" + contenido.getTitulo() + "\"");
 
+        // El instanceof con variable revisa el tipo real y lo convierte en un solo paso
         if (contenido instanceof Pelicula pelicula) {
             Actor actor = elegirPersona(actores, "Actores");
             if (actor != null) {
@@ -168,7 +172,8 @@ public class ControladorContenidos {
             }
         }
     }
-    //Metodo auxiliar para elegir persona
+
+    // Metodo generico que sirve para cualquier lista de personas y devuelve null si esta vacia
     private <T extends Persona> T elegirPersona(List<T> personas, String tipo) {
         if (personas.isEmpty()) {
             vista.mostrarError("No hay " + tipo + " registrados. Registre uno con la opcion 3.");
@@ -177,10 +182,11 @@ public class ControladorContenidos {
         vista.mostrarMensaje(tipo + " registrados:");
         vista.mostrarPersonas(personas);
         int numero = vista.leerEntero("Elija un numero: ", 1, personas.size());
+        // Se resta 1 porque la lista se muestra desde 1 pero los indices empiezan en 0
         return personas.get(numero - 1);
     }
     
-    // Submenu opcion 5
+    // Opcion 5 modifica un campo del contenido elegido
     private void modificarContenido() {
         ContenidoAudiovisual contenido = pedirContenido();
         if (contenido == null) {
@@ -191,12 +197,12 @@ public class ControladorContenidos {
         switch (campo) {
             case 1 -> contenido.setTitulo(vista.leerTexto("Nuevo titulo: "));
             case 2 -> {
+                // Usa cambiarDuracion para respetar las reglas propias de cada tipo
                 int nuevaDuracion = vista.leerEntero("Nueva duracion en minutos: ", 1, Integer.MAX_VALUE);
-                if (contenido instanceof TransmisionEnVivo transmision && nuevaDuracion < transmision.calcularDuracion()) {
-                    vista.mostrarError("La duracion no puede ser menor que la agenda (" + transmision.calcularDuracion() + " min)");
+                if (!contenido.cambiarDuracion(nuevaDuracion)) {
+                    vista.mostrarError("La duracion no es valida para este contenido");
                     return;
                 }
-                contenido.setDuracionEnMinutos(nuevaDuracion);
             }
             case 3 -> contenido.setGenero(vista.leerTexto("Nuevo genero: "));
             case 0 -> { return; }
@@ -205,7 +211,7 @@ public class ControladorContenidos {
         vista.mostrarMensaje(contenido.toString());
     }
 
-    // Opcion 6
+    // Opcion 6 elimina un contenido despues de pedir confirmacion
     private void eliminarContenido() {
         ContenidoAudiovisual contenido = pedirContenido();
         if (contenido == null) {
@@ -221,7 +227,7 @@ public class ControladorContenidos {
         }
     }
 
-    // Metodos auxiliares
+    // Devuelve null si no hay un contenido con ese id
     private ContenidoAudiovisual buscarContenidoPorId(int id) {
         for (ContenidoAudiovisual contenido : contenidos) {
             if (contenido.getId() == id) {
@@ -231,6 +237,7 @@ public class ControladorContenidos {
         return null;
     }
 
+    // Pide un id al usuario y muestra un error si el contenido no existe
     private ContenidoAudiovisual pedirContenido() {
         int id = vista.leerEntero("ID del contenido: ");
         ContenidoAudiovisual contenido = buscarContenidoPorId(id);
@@ -240,7 +247,7 @@ public class ControladorContenidos {
         return contenido;
     }
 
-    // Metodos para registrar datos
+    // Metodos publicos porque Main tambien los usa para cargar los datos iniciales
     public void agregarContenido(ContenidoAudiovisual contenido) {
         contenidos.add(contenido);
     }
