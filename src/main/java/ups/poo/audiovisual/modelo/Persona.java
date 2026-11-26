@@ -1,10 +1,23 @@
 package ups.poo.audiovisual.modelo;
 
+// Clase base con los datos comunes de actores investigadores y artistas
 public abstract class Persona {
     private String nombre;
     private String nacionalidad;
     private int edad;
-    
+    private int id;
+
+    // Getter del id sin Setter publico porque solo el catalogo puede asignarlo
+    public int getId() {
+        return id;
+    }
+
+    // Metodo sin public para que solo el catalogo asigne el id al registrar la persona
+    void asignarId(int id) {
+        this.id = id;
+    }
+
+    // Constructor protected porque solo las subclases pueden crear personas
     protected Persona(String nombre,String nacionalidad, int edad){
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;

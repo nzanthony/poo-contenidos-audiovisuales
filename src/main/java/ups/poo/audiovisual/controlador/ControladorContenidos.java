@@ -1,10 +1,10 @@
 package ups.poo.audiovisual.controlador;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ups.poo.audiovisual.modelo.Actor;
 import ups.poo.audiovisual.modelo.Artista;
+import ups.poo.audiovisual.modelo.CatalogoContenidos;
 import ups.poo.audiovisual.modelo.ContenidoAudiovisual;
 import ups.poo.audiovisual.modelo.Documental;
 import ups.poo.audiovisual.modelo.Investigador;
@@ -15,20 +15,14 @@ import ups.poo.audiovisual.modelo.TransmisionEnVivo;
 import ups.poo.audiovisual.modelo.VideoMusical;
 import ups.poo.audiovisual.vista.VistaConsola;
 
-// Conecta la vista de consola con el modelo y guarda los datos en memoria
+// Conecta la vista de consola con el catalogo que guarda los datos en memoria
 public class ControladorContenidos {
-    private VistaConsola vista;
-    private List<ContenidoAudiovisual> contenidos;
-    private List<Actor> actores;
-    private List<Investigador> investigadores;
-    private List<Artista> artistas;
+    private final VistaConsola vista;
+    private final CatalogoContenidos catalogo;
 
-    public ControladorContenidos(VistaConsola vista) {
+    public ControladorContenidos(VistaConsola vista, CatalogoContenidos catalogo) {
         this.vista = vista;
-        this.contenidos = new ArrayList<>();
-        this.actores = new ArrayList<>();
-        this.investigadores = new ArrayList<>();
-        this.artistas = new ArrayList<>();
+        this.catalogo = catalogo;
     }
 
     // Repite el menu principal hasta que el usuario elija salir con 0
@@ -38,7 +32,7 @@ public class ControladorContenidos {
             vista.menuPrincipal();
             opcion = vista.leerEntero("Opcion: ", 0, 6);
             switch (opcion) {
-                case 1 -> vista.mostrarContenidos(contenidos);
+                case 1 -> vista.mostrarContenidos(catalogo.getContenidos());
                 case 2 -> crearContenido();
                 case 3 -> registrarPersona();
                 case 4 -> agregarAContenido();
@@ -82,8 +76,13 @@ public class ControladorContenidos {
                 String plataforma = vista.leerTexto("Plataforma: ");
                 nuevo = new TransmisionEnVivo(titulo, duracion, genero, plataforma);
             }
+            // Evita un NullPointerException si el menu acepta un tipo que el switch no maneja
+            default -> {
+                vista.mostrarError("Tipo de contenido no valido");
+                return;
+            }
         }
-        agregarContenido(nuevo);
+        catalogo.agregarContenido(nuevo);
         vista.mostrarMensaje(nuevo.getTipo() + " \"" + nuevo.getTitulo() + "\" creado con ID " + nuevo.getId());
     }
 
@@ -102,17 +101,17 @@ public class ControladorContenidos {
 
         switch (tipo) {
             case 1 -> {
-                registrarActor(new Actor(nombre, nacionalidad, edad));
+                catalogo.registrarPersona(new Actor(nombre, nacionalidad, edad));
                 vista.mostrarMensaje("Actor \"" + nombre + "\" registrado");
             }
             case 2 -> {
                 String especialidad = vista.leerTexto("Especialidad: ");
-                registrarInvestigador(new Investigador(nombre, nacionalidad, especialidad, edad));
+                catalogo.registrarPersona(new Investigador(nombre, nacionalidad, especialidad, edad));
                 vista.mostrarMensaje("Investigador \"" + nombre + "\" registrado");
             }
             case 3 -> {
                 String nombreArtistico = vista.leerTexto("Nombre artistico: ");
-                registrarArtista(new Artista(nombre, nacionalidad, edad, nombreArtistico));
+                catalogo.registrarPersona(new Artista(nombre, nacionalidad, edad, nombreArtistico));
                 vista.mostrarMensaje("Artista \"" + nombreArtistico + "\" registrado");
             }
         }
@@ -128,7 +127,7 @@ public class ControladorContenidos {
 
         // El instanceof con variable revisa el tipo real y lo convierte en un solo paso
         if (contenido instanceof Pelicula pelicula) {
-            Actor actor = elegirPersona(actores, "Actores");
+            Actor actor = elegirPersona(catalogo.getPersonas(Actor.class), "Actores");
             if (actor != null) {
                 if (pelicula.agregarActor(actor)) {
                     vista.mostrarMensaje(actor.getNombre() + " agregado a \"" + pelicula.getTitulo() + "\"");
@@ -137,7 +136,7 @@ public class ControladorContenidos {
                 }
             }
         } else if (contenido instanceof Documental documental) {
-            Investigador investigador = elegirPersona(investigadores, "Investigadores");
+            Investigador investigador = elegirPersona(catalogo.getPersonas(Investigador.class), "Investigadores");
             if (investigador != null) {
                 if (documental.agregarInvestigador(investigador)) {
                     vista.mostrarMensaje(investigador.getNombre() + " agregado a \"" + documental.getTitulo() + "\"");
@@ -146,7 +145,7 @@ public class ControladorContenidos {
                 }
             }
         } else if (contenido instanceof VideoMusical video) {
-            Artista artista = elegirPersona(artistas, "Artistas");
+            Artista artista = elegirPersona(catalogo.getPersonas(Artista.class), "Artistas");
             if (artista != null) {
                 if (video.agregarArtista(artista)) {
                     vista.mostrarMensaje(artista.getNombreArtistico() + " agregado a \"" + video.getTitulo() + "\"");
@@ -220,47 +219,20 @@ public class ControladorContenidos {
         vista.mostrarMensaje("Se eliminara " + contenido.getTipo() + " \"" + contenido.getTitulo() + "\"");
         int confirmar = vista.leerEntero("Confirmar (1 = Si, 0 = No): ", 0, 1);
         if (confirmar == 1) {
-            contenidos.remove(contenido);
+            catalogo.eliminarContenido(contenido);
             vista.mostrarMensaje("Contenido eliminado");
         } else {
             vista.mostrarMensaje("Eliminacion cancelada");
         }
     }
 
-    // Devuelve null si no hay un contenido con ese id
-    private ContenidoAudiovisual buscarContenidoPorId(int id) {
-        for (ContenidoAudiovisual contenido : contenidos) {
-            if (contenido.getId() == id) {
-                return contenido;
-            }
-        }
-        return null;
-    }
-
     // Pide un id al usuario y muestra un error si el contenido no existe
     private ContenidoAudiovisual pedirContenido() {
         int id = vista.leerEntero("ID del contenido: ");
-        ContenidoAudiovisual contenido = buscarContenidoPorId(id);
+        ContenidoAudiovisual contenido = catalogo.buscarContenidoPorId(id);
         if (contenido == null) {
             vista.mostrarError("No existe un contenido con ID " + id);
         }
         return contenido;
-    }
-
-    // Metodos publicos porque Main tambien los usa para cargar los datos iniciales
-    public void agregarContenido(ContenidoAudiovisual contenido) {
-        contenidos.add(contenido);
-    }
-
-    public void registrarActor(Actor actor) {
-        actores.add(actor);
-    }
-
-    public void registrarInvestigador(Investigador investigador) {
-        investigadores.add(investigador);
-    }
-
-    public void registrarArtista(Artista artista) {
-        artistas.add(artista);
     }
 }

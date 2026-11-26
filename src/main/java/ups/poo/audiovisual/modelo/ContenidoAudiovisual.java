@@ -2,16 +2,18 @@ package ups.poo.audiovisual.modelo;
 
 // Clase base con los datos comunes a todos los tipos de contenido
 public abstract class ContenidoAudiovisual {
-    // Contador compartido por todas las instancias para generar ids unicos
-    private static int contar = 0;
     private String titulo;
     private int duracionEnMinutos;
     private String genero;
     private int id;
 
-    // Asigna el siguiente id disponible y luego aumenta el contador
+    // Metodo sin public para que solo el catalogo asigne el id al registrar el contenido
+    void asignarId(int id) {
+        this.id = id;
+    }
+
+    // El id queda en 0 hasta que el catalogo lo asigne al registrar el contenido
     public ContenidoAudiovisual(String titulo, int duracionEnMinutos, String genero) {
-        this.id = contar++;
         this.titulo = titulo;
         this.duracionEnMinutos = duracionEnMinutos;
         this.genero = genero;
@@ -54,7 +56,7 @@ public abstract class ContenidoAudiovisual {
         this.genero = genero;
     }
 
-    // Getter del id sin Setter porque el id no debe cambiar despues de crearse
+    // Getter del id sin Setter publico porque solo el catalogo puede asignarlo
     public int getId() {
         return id;
     }

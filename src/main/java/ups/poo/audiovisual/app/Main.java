@@ -8,12 +8,15 @@ public class Main {
 
     public static void main(String[] args) {
         VistaConsola vista = new VistaConsola();
-        ControladorContenidos controlador = new ControladorContenidos(vista);
-        cargarDatosIniciales(controlador);
+        CatalogoContenidos catalogo = new CatalogoContenidos();
+        cargarDatosIniciales(catalogo);
+        ControladorContenidos controlador = new ControladorContenidos(vista, catalogo);
         controlador.iniciar();
     }
 
-    private static void cargarDatosIniciales(ControladorContenidos controlador) {
+
+    // Datos de ejemplo para que el sistema no empiece vacio
+    private static void cargarDatosIniciales(CatalogoContenidos catalogo) {
         // Personas
         Actor ryanGosling = new Actor("Ryan Gosling", "Canadiense", 30);
         Actor emmaStone = new Actor("Emma Stone", "Estadounidense", 28);
@@ -21,13 +24,13 @@ public class Main {
         Artista luisFonsi = new Artista("Luis Alfonso Rodríguez", "Puertorriqueña", 48, "Luis Fonsi");
         Artista daddyYankee = new Artista("Ramón Ayala", "Puertorriqueña", 49, "Daddy Yankee");
 
-        controlador.registrarActor(ryanGosling);
-        controlador.registrarActor(emmaStone);
-        controlador.registrarInvestigador(neil);
-        controlador.registrarArtista(luisFonsi);
-        controlador.registrarArtista(daddyYankee);
+        catalogo.registrarPersona(ryanGosling);
+        catalogo.registrarPersona(emmaStone);
+        catalogo.registrarPersona(neil);
+        catalogo.registrarPersona(luisFonsi);
+        catalogo.registrarPersona(daddyYankee);
 
-        // Películas
+        // Peliculas
         Pelicula laLaLand = new Pelicula("La La Land", 128, "Musical", "Summit Entertainment");
         laLaLand.agregarActor(ryanGosling);
         laLaLand.agregarActor(emmaStone);
@@ -54,19 +57,19 @@ public class Main {
         VideoMusical gasolina = new VideoMusical("Gasolina", 3, "Reguetón", "Barrio Fino", 2004);
         gasolina.agregarArtista(daddyYankee);
 
-        // Transmisión en vivo
+        // Transmision en vivo
         TransmisionEnVivo velada = new TransmisionEnVivo("La Velada del Año", 255, "Entretenimiento", "Twitch");
         velada.agregarSegmento("Previa", 30);
         velada.agregarSegmento("Combates", 180);
         velada.agregarSegmento("Concierto final", 45);
 
-        controlador.agregarContenido(laLaLand);
-        controlador.agregarContenido(crazyStupidLove);
-        controlador.agregarContenido(got);
-        controlador.agregarContenido(cosmos);
-        controlador.agregarContenido(cosmosPossibleWorlds);
-        controlador.agregarContenido(despacito);
-        controlador.agregarContenido(gasolina);
-        controlador.agregarContenido(velada);
+        catalogo.agregarContenido(laLaLand);
+        catalogo.agregarContenido(crazyStupidLove);
+        catalogo.agregarContenido(got);
+        catalogo.agregarContenido(cosmos);
+        catalogo.agregarContenido(cosmosPossibleWorlds);
+        catalogo.agregarContenido(despacito);
+        catalogo.agregarContenido(gasolina);
+        catalogo.agregarContenido(velada);
     }
 }
