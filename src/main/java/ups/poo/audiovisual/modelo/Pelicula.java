@@ -1,19 +1,22 @@
-/**
- * Class Pelicula
- */
 package ups.poo.audiovisual.modelo;
-import java.util.ArrayList;
+
 import java.util.List;
 
-// Subclase Pelicula que extiende de ContenidoAudiovisual
 public class Pelicula extends ContenidoAudiovisual {
     private String estudio;
-    private List<Actor> actores;
+    private final Participantes<Actor> actores = new Participantes<>();
 
     public Pelicula(String titulo, int duracionEnMinutos, String genero, String estudio) {
         super(titulo, duracionEnMinutos, genero);
-        actores = new ArrayList<Actor>();
         this.estudio = estudio;
+    }
+
+    public boolean agregarActor(Actor actor) {
+        return actores.agregar(actor);
+    }
+
+    public List<Actor> getActores() {
+        return actores.comoLista();
     }
 
     public String getEstudio() {
@@ -24,18 +27,6 @@ public class Pelicula extends ContenidoAudiovisual {
         this.estudio = estudio;
     }
 
-    public boolean agregarActor(Actor actor) {
-        if (actor == null || actores.contains(actor)) {
-            return false;
-        }
-        actores.add(actor);
-        return true;
-    }
-
-    public List<Actor> getActores() {
-        return List.copyOf(actores);
-    }
-    
     @Override
     public String getTipo() {
         return "Pelicula";
@@ -43,10 +34,6 @@ public class Pelicula extends ContenidoAudiovisual {
 
     @Override
     public String toString() {
-        String texto = super.toString() + "\nEstudio: " + estudio + "\nActores: ";
-        for (Actor actor : actores){
-            texto += "\n  - " + actor.getNombre();
-        }
-        return texto;
+        return super.toString() + "\nEstudio: " + estudio + "\nActores: " + actores.listar();
     }
 }

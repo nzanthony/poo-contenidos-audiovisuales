@@ -1,29 +1,24 @@
 package ups.poo.audiovisual.modelo;
-import java.util.ArrayList;
+
 import java.util.List;
 
-public class VideoMusical extends ContenidoAudiovisual{
+public class VideoMusical extends ContenidoAudiovisual {
     private String album;
     private int anioLanzamiento;
-    private List<Artista> artistas;
+    private final Participantes<Artista> artistas = new Participantes<>();
 
-    public VideoMusical(String titulo, int duracionEnMinutos, String genero, String album, int anioLanzamiento){
+    public VideoMusical(String titulo, int duracionEnMinutos, String genero, String album, int anioLanzamiento) {
         super(titulo, duracionEnMinutos, genero);
         this.album = album;
         this.anioLanzamiento = anioLanzamiento;
-        this.artistas = new ArrayList<>();
     }
 
-    public boolean agregarArtista(Artista artista){
-        if (artista == null || artistas.contains(artista)) {
-            return false;
-        }
-        artistas.add(artista);
-        return true;
+    public boolean agregarArtista(Artista artista) {
+        return artistas.agregar(artista);
     }
 
-    public List<Artista> getArtistas(){
-        return List.copyOf(artistas);
+    public List<Artista> getArtistas() {
+        return artistas.comoLista();
     }
 
     public String getAlbum() {
@@ -49,10 +44,6 @@ public class VideoMusical extends ContenidoAudiovisual{
 
     @Override
     public String toString() {
-        String texto = super.toString() + "\nAlbum: " + album + "\nAño: " + anioLanzamiento + "\nArtistas: ";
-        for (Artista artista : artistas) {
-            texto += "\n  - " + artista.getNombreArtistico() + " (" + artista.getNombre() + ")";
-        }
-        return texto;
+        return super.toString() + "\nAlbum: " + album + "\nAño: " + anioLanzamiento + "\nArtistas: " + artistas.listar();
     }
 }

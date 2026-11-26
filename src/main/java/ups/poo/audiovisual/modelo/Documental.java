@@ -1,31 +1,22 @@
-/**
- * Class Documental
- */
 package ups.poo.audiovisual.modelo;
-import java.util.ArrayList;
+
 import java.util.List;
 
-// Subclase Documental que extiende de ContenidoAudiovisual
 public class Documental extends ContenidoAudiovisual {
     private String tema;
-    private List<Investigador> investigadores;
+    private final Participantes<Investigador> investigadores = new Participantes<>();
 
     public Documental(String titulo, int duracionEnMinutos, String genero, String tema) {
         super(titulo, duracionEnMinutos, genero);
-        investigadores = new ArrayList<Investigador>();
         this.tema = tema;
     }
-    
-    public boolean agregarInvestigador(Investigador investigador){
-        if (investigador == null || investigadores.contains(investigador)) {
-            return false;
-        }
-        investigadores.add(investigador);
-        return true;
+
+    public boolean agregarInvestigador(Investigador investigador) {
+        return investigadores.agregar(investigador);
     }
 
-    public List <Investigador> getInvestigadores(){
-        return List.copyOf(investigadores);
+    public List<Investigador> getInvestigadores() {
+        return investigadores.comoLista();
     }
 
     public String getTema() {
@@ -35,7 +26,7 @@ public class Documental extends ContenidoAudiovisual {
     public void setTema(String tema) {
         this.tema = tema;
     }
-    
+
     @Override
     public String getTipo() {
         return "Documental";
@@ -43,10 +34,6 @@ public class Documental extends ContenidoAudiovisual {
 
     @Override
     public String toString() {
-        String texto = super.toString() + "\nTema: " + tema + "\nInvestigadores: ";
-        for (Investigador investigador : investigadores){
-            texto += "\n  - " + investigador.getNombre();
-        }
-        return texto;
+        return super.toString() + "\nTema: " + tema + "\nInvestigadores: " + investigadores.listar();
     }
 }

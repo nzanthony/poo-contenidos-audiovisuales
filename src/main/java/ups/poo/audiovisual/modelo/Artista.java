@@ -15,4 +15,9 @@ public class Artista extends Persona{
     public void setNombreArtistico(String nombreArtistico) {
         this.nombreArtistico = nombreArtistico;
     }
+
+    @Override
+    public String toString() {
+        return nombreArtistico + " (" + getNombre() + ")";
+    }
 }
