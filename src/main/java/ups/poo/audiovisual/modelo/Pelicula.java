@@ -8,7 +8,7 @@ public class Pelicula extends ContenidoAudiovisual {
 
     public Pelicula(String titulo, int duracionEnMinutos, String genero, String estudio) {
         super(titulo, duracionEnMinutos, genero);
-        this.estudio = estudio;
+        this.estudio = Validacion.exigirTexto(estudio, "El estudio");
     }
 
     public boolean agregarActor(Actor actor) {
@@ -18,13 +18,12 @@ public class Pelicula extends ContenidoAudiovisual {
     public List<Actor> getActores() {
         return actores.comoLista();
     }
-
     public String getEstudio() {
         return estudio;
     }
 
     public void setEstudio(String estudio) {
-        this.estudio = estudio;
+        this.estudio = Validacion.exigirTexto(estudio, "El estudio");
     }
 
     @Override

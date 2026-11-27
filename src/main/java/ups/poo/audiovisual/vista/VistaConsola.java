@@ -1,10 +1,12 @@
 package ups.poo.audiovisual.vista;
+
 import java.util.Scanner;
 import java.util.List;
 
 import ups.poo.audiovisual.modelo.ContenidoAudiovisual;
 import ups.poo.audiovisual.modelo.Persona;
 
+// Interfaz de consola que muestra los menus y lee datos validados del usuario
 public class VistaConsola {
     private Scanner scanner = new Scanner(System.in);
 
@@ -16,6 +18,7 @@ public class VistaConsola {
         System.out.println("4. Agregar a un contenido");
         System.out.println("5. Modificar contenido");
         System.out.println("6. Eliminar contenido");
+        System.out.println("7. Guardar cambios");
         System.out.println("0. Salir");
     }
 
@@ -57,7 +60,8 @@ public class VistaConsola {
         System.out.println("3. Genero");
         System.out.println("0. Volver");
     }
-    
+
+    // Lee la linea completa en vez de usar nextInt para no dejar saltos de linea pendientes en el Scanner
     public int leerEntero(String mensaje) {
         while (true) {
             System.out.print(mensaje);
@@ -70,6 +74,7 @@ public class VistaConsola {
         }
     }
 
+    // Repite la pregunta hasta que el numero este entre minimo y maximo incluidos
     public int leerEntero(String mensaje, int minimo, int maximo) {
         while (true) {
             int numero = leerEntero(mensaje);
@@ -80,6 +85,7 @@ public class VistaConsola {
         }
     }
 
+    // Repite la pregunta hasta recibir un texto que no este vacio ni tenga solo espacios
     public String leerTexto(String mensaje) {
         while (true) {
             System.out.print(mensaje);
@@ -96,6 +102,6 @@ public class VistaConsola {
     }
 
     public void mostrarError(String mensaje){
-       System.out.println("Error: " + mensaje);
+        System.out.println("Error: " + mensaje);
     }
 }

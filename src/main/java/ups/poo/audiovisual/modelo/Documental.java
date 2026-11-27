@@ -8,7 +8,7 @@ public class Documental extends ContenidoAudiovisual {
 
     public Documental(String titulo, int duracionEnMinutos, String genero, String tema) {
         super(titulo, duracionEnMinutos, genero);
-        this.tema = tema;
+        this.tema = Validacion.exigirTexto(tema, "El tema");
     }
 
     public boolean agregarInvestigador(Investigador investigador) {
@@ -18,13 +18,12 @@ public class Documental extends ContenidoAudiovisual {
     public List<Investigador> getInvestigadores() {
         return investigadores.comoLista();
     }
-
     public String getTema() {
         return tema;
     }
 
     public void setTema(String tema) {
-        this.tema = tema;
+        this.tema = Validacion.exigirTexto(tema, "El tema");
     }
 
     @Override

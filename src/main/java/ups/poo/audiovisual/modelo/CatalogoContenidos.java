@@ -54,4 +54,39 @@ public class CatalogoContenidos {
         }
         return resultado;
     }
+
+    // Conserva el id leido del archivo y ajusta el contador para que los nuevos ids no se repitan
+    public void restaurarContenido(ContenidoAudiovisual contenido, int id) {
+        if (buscarContenidoPorId(id) != null) {
+            throw new IllegalArgumentException("ID de contenido repetido: " + id);
+        }
+        contenido.asignarId(id);
+        contenidos.add(contenido);
+        siguienteIdContenido = Math.max(siguienteIdContenido, id + 1);
+    }
+
+    // Conserva el id leido del archivo y ajusta el contador para que los nuevos ids no se repitan
+    public void restaurarPersona(Persona persona, int id) {
+        if (buscarPersonaPorId(id) != null) {
+            throw new IllegalArgumentException("ID de persona repetido: " + id);
+        }
+        persona.asignarId(id);
+        personas.add(persona);
+        siguienteIdPersona = Math.max(siguienteIdPersona, id + 1);
+    }
+
+    // Devuelve null si no hay una persona con ese id
+    public Persona buscarPersonaPorId(int id) {
+        for (Persona persona : personas) {
+            if (persona.getId() == id) {
+                return persona;
+            }
+        }
+        return null;
+    }
+
+    // Devuelve una copia de solo lectura con todas las personas sin importar su tipo
+    public List<Persona> getPersonas() {
+        return List.copyOf(personas);
+    }
 }

@@ -39,4 +39,12 @@ class VideoMusicalTest {
 
         assertTrue(video.toString().contains("Luis Fonsi (Luis Alfonso Rodriguez)"));
     }
+
+    @Test
+    void aceptaLosLimitesDelAnioYRechazaLosValoresFuera() {
+        assertDoesNotThrow(() -> new VideoMusical("Antiguo", 3, "Jazz", "Album", 1900));
+        assertDoesNotThrow(() -> new VideoMusical("Futuro", 3, "Pop", "Album", 2100));
+        assertThrows(IllegalArgumentException.class, () -> new VideoMusical("Antiguo", 3, "Jazz", "Album", 1899));
+        assertThrows(IllegalArgumentException.class, () -> new VideoMusical("Futuro", 3, "Pop", "Album", 2101));
+    }
 }

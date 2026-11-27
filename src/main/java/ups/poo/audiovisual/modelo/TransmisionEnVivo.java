@@ -9,7 +9,7 @@ public class TransmisionEnVivo extends ContenidoAudiovisual{
 
     public TransmisionEnVivo(String titulo, int duracionEnMinutos, String genero, String plataforma){
         super(titulo, duracionEnMinutos, genero);
-        this.plataforma = plataforma;
+        this.plataforma = Validacion.exigirTexto(plataforma, "La plataforma");
         segmentos = new ArrayList<Segmento>();
     }
 
@@ -43,7 +43,7 @@ public class TransmisionEnVivo extends ContenidoAudiovisual{
     }
 
     public void setPlataforma(String plataforma) {
-        this.plataforma = plataforma;
+        this.plataforma = Validacion.exigirTexto(plataforma, "La plataforma");
     }
 
     // Suma la duracion de todos los segmentos de la agenda

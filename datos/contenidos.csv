@@ -1,0 +1,9 @@
+id;tipo;titulo;duracion;genero;extra1;extra2
+0;PELICULA;La La Land;128;Musical;Summit Entertainment;
+1;PELICULA;Crazy, Stupid, Love;118;Comedia romántica;Warner Bros;
+2;SERIE;Game of Thrones;60;Fantasy;;
+3;DOCUMENTAL;Cosmos;45;Ciencia;Astronomia;
+4;DOCUMENTAL;Cosmos: Possible Worlds;44;Ciencia;Astrobiología;
+5;VIDEO_MUSICAL;Despacito;5;Reguetón;Vida;2017
+6;VIDEO_MUSICAL;Gasolina;3;Reguetón;Barrio Fino;2004
+7;TRANSMISION;La Velada del Año;255;Entretenimiento;Twitch;

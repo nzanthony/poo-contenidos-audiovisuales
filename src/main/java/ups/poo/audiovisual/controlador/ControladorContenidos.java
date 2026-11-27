@@ -1,5 +1,7 @@
 package ups.poo.audiovisual.controlador;
 
+import java.io.IOException;
+import java.nio.charset.MalformedInputException;
 import java.util.List;
 
 import ups.poo.audiovisual.modelo.Actor;
@@ -13,24 +15,31 @@ import ups.poo.audiovisual.modelo.Persona;
 import ups.poo.audiovisual.modelo.SerieDeTV;
 import ups.poo.audiovisual.modelo.TransmisionEnVivo;
 import ups.poo.audiovisual.modelo.VideoMusical;
+import ups.poo.audiovisual.modelo.persistencia.RepositorioContenidos;
 import ups.poo.audiovisual.vista.VistaConsola;
 
-// Conecta la vista de consola con el catalogo que guarda los datos en memoria
+// Coordina la vista de consola con el catalogo en memoria y el repositorio que guarda los datos
 public class ControladorContenidos {
     private final VistaConsola vista;
-    private final CatalogoContenidos catalogo;
+    private CatalogoContenidos catalogo = new CatalogoContenidos();
+    private final RepositorioContenidos repositorio;
+    // Bloquea el guardado si la carga fallo para no sobrescribir los archivos con un catalogo vacio
+    private boolean cargaFallida;
+    // Indica si se omitieron filas al cargar para pedir confirmacion antes de guardar
+    private boolean hayFilasOmitidas;
 
-    public ControladorContenidos(VistaConsola vista, CatalogoContenidos catalogo) {
+    public ControladorContenidos(VistaConsola vista, RepositorioContenidos repositorio) {
         this.vista = vista;
-        this.catalogo = catalogo;
+        this.repositorio = repositorio;
     }
 
-    // Repite el menu principal hasta que el usuario elija salir con 0
+    // Repite el menu principal hasta que salir confirme que el programa puede terminar
     public void iniciar() {
-        int opcion;
-        do {
+        cargarDatos();
+        boolean terminar = false;
+        while (!terminar) {
             vista.menuPrincipal();
-            opcion = vista.leerEntero("Opcion: ", 0, 6);
+            int opcion = vista.leerEntero("Opcion: ", 0, 7);
             switch (opcion) {
                 case 1 -> vista.mostrarContenidos(catalogo.getContenidos());
                 case 2 -> crearContenido();
@@ -38,9 +47,30 @@ public class ControladorContenidos {
                 case 4 -> agregarAContenido();
                 case 5 -> modificarContenido();
                 case 6 -> eliminarContenido();
-                case 0 -> vista.mostrarMensaje("Hasta luego");
+                case 7 -> guardarCambios();
+                case 0 -> terminar = salir();
             }
-        } while (opcion != 0);
+        }
+    }
+
+    // Reemplaza el catalogo con los datos guardados y muestra los avisos de la carga
+    private void cargarDatos() {
+        try {
+            catalogo = repositorio.cargar();
+            vista.mostrarMensaje("Datos cargados: " + catalogo.getContenidos().size() + " contenidos y "
+                    + catalogo.getPersonas().size() + " personas");
+        } catch (MalformedInputException e) {
+            // Se lanza cuando un archivo se guardo con otra codificacion como la que usa Excel
+            cargaFallida = true;
+            vista.mostrarError("Un archivo de datos no esta en UTF-8. Se inicia con un catalogo vacio y no se podra guardar.");
+        } catch (IOException e) {
+            cargaFallida = true;
+            vista.mostrarError("No se pudieron leer los datos (" + e.getMessage() + "). Se inicia con un catalogo vacio y no se podra guardar.");
+        }
+        hayFilasOmitidas = repositorio.hayFilasOmitidas();
+        for (String advertencia : repositorio.getAdvertencias()) {
+            vista.mostrarMensaje("Aviso: " + advertencia);
+        }
     }
 
     // Opcion 2 crea un contenido del tipo elegido en el submenu
@@ -184,7 +214,7 @@ public class ControladorContenidos {
         // Se resta 1 porque la lista se muestra desde 1 pero los indices empiezan en 0
         return personas.get(numero - 1);
     }
-    
+
     // Opcion 5 modifica un campo del contenido elegido
     private void modificarContenido() {
         ContenidoAudiovisual contenido = pedirContenido();
@@ -224,6 +254,50 @@ public class ControladorContenidos {
         } else {
             vista.mostrarMensaje("Eliminacion cancelada");
         }
+    }
+
+    // Opcion 7 guarda el catalogo y devuelve false si la carga fallo o el usuario cancelo o hubo un error
+    private boolean guardarCambios() {
+        if (cargaFallida) {
+            vista.mostrarError("No se guarda porque los archivos no se pudieron leer y se perderian sus datos");
+            return false;
+        }
+        if (hayFilasOmitidas && !confirmarGuardadoConAvisos()) {
+            vista.mostrarMensaje("Guardado cancelado");
+            return false;
+        }
+        try {
+            repositorio.guardar(catalogo);
+            // Despues de guardar los archivos ya coinciden con el catalogo y no hay filas pendientes
+            hayFilasOmitidas = false;
+            vista.mostrarMensaje("Cambios guardados");
+            return true;
+        } catch (IOException e) {
+            vista.mostrarError("No se pudieron guardar los cambios: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Pide confirmacion porque guardar borra de los archivos las filas que se omitieron al cargar
+    private boolean confirmarGuardadoConAvisos() {
+        vista.mostrarMensaje("Hubo avisos al cargar: las filas omitidas se eliminaran de los archivos.");
+        return vista.leerEntero("¿Guardar de todas formas? (1 = Si, 0 = No): ", 0, 1) == 1;
+    }
+
+    // Opcion 0 ofrece guardar y devuelve false para volver al menu si el guardado pedido no se completo
+    private boolean salir() {
+        if (cargaFallida) {
+            // No tiene sentido preguntar porque guardar esta bloqueado desde la carga
+            vista.mostrarMensaje("Los cambios no se guardan porque los datos no se pudieron leer");
+        } else {
+            int guardar = vista.leerEntero("¿Guardar los cambios antes de salir? (1 = Si, 0 = No): ", 0, 1);
+            if (guardar == 1 && !guardarCambios()) {
+                vista.mostrarMensaje("No se guardo y se vuelve al menu para no perder los cambios");
+                return false;
+            }
+        }
+        vista.mostrarMensaje("Hasta luego");
+        return true;
     }
 
     // Pide un id al usuario y muestra un error si el contenido no existe

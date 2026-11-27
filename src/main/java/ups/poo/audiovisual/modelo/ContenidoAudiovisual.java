@@ -14,9 +14,10 @@ public abstract class ContenidoAudiovisual {
 
     // El id queda en 0 hasta que el catalogo lo asigne al registrar el contenido
     public ContenidoAudiovisual(String titulo, int duracionEnMinutos, String genero) {
-        this.titulo = titulo;
-        this.duracionEnMinutos = duracionEnMinutos;
-        this.genero = genero;
+        this.titulo = Validacion.exigirTexto(titulo, "El titulo");
+        // No usa esDuracionValida porque las subclases aun no terminan de construirse
+        this.duracionEnMinutos = Validacion.exigirPositivo(duracionEnMinutos, "La duracion");
+        this.genero = Validacion.exigirTexto(genero, "El genero");
     }
 
     // Getter y Setter del titulo
@@ -25,7 +26,7 @@ public abstract class ContenidoAudiovisual {
     }
 
     public void setTitulo(String titulo) {
-        this.titulo = titulo;
+        this.titulo = Validacion.exigirTexto(titulo, "El titulo");
     }
 
     // Getter de la duracion sin Setter porque se cambia con cambiarDuracion para validarla
@@ -53,7 +54,7 @@ public abstract class ContenidoAudiovisual {
     }
 
     public void setGenero(String genero) {
-        this.genero = genero;
+        this.genero = Validacion.exigirTexto(genero, "El genero");
     }
 
     // Getter del id sin Setter publico porque solo el catalogo puede asignarlo

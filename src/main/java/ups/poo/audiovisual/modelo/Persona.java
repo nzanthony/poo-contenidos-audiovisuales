@@ -19,9 +19,9 @@ public abstract class Persona {
 
     // Constructor protected porque solo las subclases pueden crear personas
     protected Persona(String nombre,String nacionalidad, int edad){
-        this.nombre = nombre;
-        this.nacionalidad = nacionalidad;
-        this.edad = edad;
+        this.nombre = Validacion.exigirTexto(nombre, "El nombre");
+        this.nacionalidad = Validacion.exigirTexto(nacionalidad, "La nacionalidad");
+        this.edad = Validacion.exigirRango(edad, 0, 120, "La edad");
     }
 
     public String getNombre() {
@@ -29,7 +29,7 @@ public abstract class Persona {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = Validacion.exigirTexto(nombre, "El nombre");
     }
 
     public String getNacionalidad() {
@@ -37,7 +37,7 @@ public abstract class Persona {
     }
 
     public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
+        this.nacionalidad = Validacion.exigirTexto(nacionalidad, "La nacionalidad");
     }
 
     public int getEdad() {
@@ -45,7 +45,7 @@ public abstract class Persona {
     }
 
     public void setEdad(int edad) {
-        this.edad = edad;
+        this.edad = Validacion.exigirRango(edad, 0, 120, "La edad");
     }
 
     @Override

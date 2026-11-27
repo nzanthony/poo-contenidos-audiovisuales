@@ -9,8 +9,8 @@ public class VideoMusical extends ContenidoAudiovisual {
 
     public VideoMusical(String titulo, int duracionEnMinutos, String genero, String album, int anioLanzamiento) {
         super(titulo, duracionEnMinutos, genero);
-        this.album = album;
-        this.anioLanzamiento = anioLanzamiento;
+        this.album = Validacion.exigirTexto(album, "El album");
+        this.anioLanzamiento = Validacion.exigirRango(anioLanzamiento, 1900, 2100, "El anio de lanzamiento");
     }
 
     public boolean agregarArtista(Artista artista) {
@@ -20,13 +20,12 @@ public class VideoMusical extends ContenidoAudiovisual {
     public List<Artista> getArtistas() {
         return artistas.comoLista();
     }
-
     public String getAlbum() {
         return album;
     }
 
     public void setAlbum(String album) {
-        this.album = album;
+        this.album = Validacion.exigirTexto(album, "El album");
     }
 
     public int getAnioLanzamiento() {
@@ -34,7 +33,7 @@ public class VideoMusical extends ContenidoAudiovisual {
     }
 
     public void setAnioLanzamiento(int anioLanzamiento) {
-        this.anioLanzamiento = anioLanzamiento;
+        this.anioLanzamiento = Validacion.exigirRango(anioLanzamiento, 1900, 2100, "El anio de lanzamiento");
     }
 
     @Override

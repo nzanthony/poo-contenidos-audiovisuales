@@ -5,7 +5,7 @@ public class Investigador extends Persona {
 
     public Investigador(String nombre, String nacionalidad, String especialidad, int edad){
         super(nombre, nacionalidad, edad);
-        this.especialidad = especialidad;
+        this.especialidad = Validacion.exigirTexto(especialidad, "La especialidad");
     }
 
     public String getEspecialidad() {
@@ -13,6 +13,6 @@ public class Investigador extends Persona {
     }
 
     public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
+        this.especialidad = Validacion.exigirTexto(especialidad, "La especialidad");
     }
 }

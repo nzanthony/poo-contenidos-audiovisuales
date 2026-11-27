@@ -5,7 +5,7 @@ public class Artista extends Persona{
 
     public Artista(String nombre, String nacionalidad, int edad, String nombreArtistico){
         super(nombre, nacionalidad, edad);
-        this.nombreArtistico = nombreArtistico;
+        this.nombreArtistico = Validacion.exigirTexto(nombreArtistico, "El nombre artistico");
     }
 
     public String getNombreArtistico() {
@@ -13,7 +13,7 @@ public class Artista extends Persona{
     }
 
     public void setNombreArtistico(String nombreArtistico) {
-        this.nombreArtistico = nombreArtistico;
+        this.nombreArtistico = Validacion.exigirTexto(nombreArtistico, "El nombre artistico");
     }
 
     @Override
